@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>MiniCRM - Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- TOP NAVIGATION -->
+  <nav class="navbar">
+    <div class="nav-brand">
+      <span>📋</span> MiniCRM
+    </div>
+    <div class="nav-right">
+      <span id="user-name" class="nav-user"></span>
+      <button class="btn btn-outline" onclick="logout()">Logout</button>
+    </div>
+  </nav>
+
+  <div class="container">
+
+    <!-- STATS CARDS -->
+    <div class="stats-grid" id="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number" id="stat-total">0</div>
+        <div class="stat-label">Total Leads</div>
+      </div>
+      <div class="stat-card new">
+        <div class="stat-number" id="stat-new">0</div>
+        <div class="stat-label">New</div>
+      </div>
+      <div class="stat-card contacted">
+        <div class="stat-number" id="stat-contacted">0</div>
+        <div class="stat-label">Contacted</div>
+      </div>
+      <div class="stat-card converted">
+        <div class="stat-number" id="stat-converted">0</div>
+        <div class="stat-label">Converted</div>
+      </div>
+    </div>
+
+    <!-- TOOLBAR: Search + Filters + Add Button -->
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <input type="text" id="search-input" placeholder="🔍 Search by name or email..." class="search-input" />
+        <select id="filter-status" class="select-input">
+          <option value="">All Statuses</option>
+          <option value="New">New</option>
+          <option value="Contacted">Contacted</option>
+          <option value="Converted">Converted</option>
+          <option value="Lost">Lost</option>
+        </select>
+        <select id="filter-source" class="select-input">
+          <option value="">All Sources</option>
+          <option value="Website">Website</option>
+          <option value="Referral">Referral</option>
+          <option value="Social Media">Social Media</option>
+          <option value="Cold Call">Cold Call</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="openAddModal()">+ Add Lead</button>
+    </div>
+
+    <!-- LEADS TABLE -->
+    <div class="table-wrapper">
+      <table class="leads-table">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Source</th>
+            <th>Status</th>
+            <th>Follow-up</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="leads-tbody">
+          <!-- Rows are injected by JavaScript -->
+        </tbody>
+      </table>
+      <div id="empty-state" class="empty-state hidden">
+        <p>🔍 No leads found. Add your first lead!</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== ADD/EDIT LEAD MODAL ===================== -->
+  <div id="lead-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="modal-title">Add New Lead</h2>
+        <button class="modal-close" onclick="closeModal()">✕</button>
+      </div>
+      <form id="lead-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label>Full Name *</label>
+            <input type="text" id="lead-name" required placeholder="Jane Smith" />
+          </div>
+          <div class="form-group">
+            <label>Email *</label>
+            <input type="email" id="lead-email" required placeholder="jane@example.com" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Phone</label>
+            <input type="text" id="lead-phone" placeholder="+1 555 000 0000" />
+          </div>
+          <div class="form-group">
+            <label>Source</label>
+            <select id="lead-source">
+              <option>Website</option>
+              <option>Referral</option>
+              <option>Social Media</option>
+              <option>Cold Call</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Status</label>
+            <select id="lead-status">
+              <option>New</option>
+              <option>Contacted</option>
+              <option>Converted</option>
+              <option>Lost</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Follow-up Date</label>
+            <input type="date" id="lead-followup" />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline" onclick="closeModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="save-lead-btn">Save Lead</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===================== VIEW LEAD + NOTES MODAL ===================== -->
+  <div id="notes-modal" class="modal hidden">
+    <div class="modal-content modal-large">
+      <div class="modal-header">
+        <h2 id="notes-modal-title">Lead Details</h2>
+        <button class="modal-close" onclick="closeNotesModal()">✕</button>
+      </div>
+
+      <!-- Lead details summary -->
+      <div id="lead-detail-card" class="detail-card"></div>
+
+      <!-- Notes section -->
+      <div class="notes-section">
+        <h3>Notes & Follow-ups</h3>
+        <div id="notes-list" class="notes-list"></div>
+        <div class="add-note-form">
+          <textarea id="new-note-text" placeholder="Write a note about this lead..." rows="3"></textarea>
+          <button class="btn btn-primary" onclick="submitNote()">Add Note</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dark overlay behind modals -->
+  <div id="modal-overlay" class="modal-overlay hidden" onclick="closeAllModals()"></div>
+
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
